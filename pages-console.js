@@ -312,9 +312,9 @@ page({ path:'/console/affiliate/links', title:'邀请链接与海报', level:3, 
     <div class="hint">好友通过此链接注册后自动绑定推广关系，双方各得 ¥2 体验金</div>
   </div>
   <div class="lp-grid g3">
-    <div class="lp-card" style="text-align:center"><div class="chart-placeholder" style="height:160px">海报 1</div><p style="margin-top:10px"><a class="btn btn-ghost btn-sm">下载海报</a></p></div>
-    <div class="lp-card" style="text-align:center"><div class="chart-placeholder" style="height:160px">海报 2</div><p style="margin-top:10px"><a class="btn btn-ghost btn-sm">下载海报</a></p></div>
-    <div class="lp-card" style="text-align:center"><div class="chart-placeholder" style="height:160px">海报 3</div><p style="margin-top:10px"><a class="btn btn-ghost btn-sm">下载海报</a></p></div>
+    <div class="lp-card" style="text-align:center"><div class="poster-box poster-1">海报 1</div><p style="margin-top:10px"><a class="btn btn-ghost btn-sm">下载海报</a></p></div>
+    <div class="lp-card" style="text-align:center"><div class="poster-box poster-2">海报 2</div><p style="margin-top:10px"><a class="btn btn-ghost btn-sm">下载海报</a></p></div>
+    <div class="lp-card" style="text-align:center"><div class="poster-box poster-3">海报 3</div><p style="margin-top:10px"><a class="btn btn-ghost btn-sm">下载海报</a></p></div>
   </div>`;
 }});
 

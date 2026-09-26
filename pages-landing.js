@@ -2,6 +2,7 @@
 
 page({ path:'/', title:'首页', level:1, group:'landing', crumb:['首页'], render(){ return `
 <section class="lp-hero"><div class="lp-in">
+  <img class="hero-logo" src="assets/logo.png" alt="中芯力算">
   <h1>中芯力算 · <span class="hl">AI Token 聚合分发平台</span></h1>
   <p>一个 API Key 调用全球主流大模型 —— Claude / GPT / DeepSeek / 千问 / 视频图像全支持。按量计费、余额不过期、多级代理分销，助力开发者与渠道商低成本接入 AI 能力。</p>
   <div style="display:flex;gap:12px;justify-content:center">
@@ -13,6 +14,9 @@ page({ path:'/', title:'首页', level:1, group:'landing', crumb:['首页'], ren
     <div><div style="font-size:26px;font-weight:700;color:var(--ink)">99.9%</div>可用性 SLA</div>
     <div><div style="font-size:26px;font-weight:700;color:var(--ink)">¥0.001</div>起 / 千 Token</div>
     <div><div style="font-size:26px;font-weight:700;color:var(--ink)">7×24h</div>客服支持</div>
+  </div>
+  <div class="chips">
+    <span class="chip">claude-opus-5</span><span class="chip">gpt-5.5</span><span class="chip">deepseek-v4-flash</span><span class="chip">kimi-k2.5</span><span class="chip">seedance-2.0</span>
   </div>
 </div></section>
 
@@ -156,11 +160,11 @@ page({ path:'/sitemap', title:'页面地图 · 完整页面层级', level:2, gro
   [1,2,3,4,5].forEach(lv=>{
     const ps = (byLevel[lv]||[]).sort((a,b)=>a.path.localeCompare(b.path));
     if(!ps.length) return;
-    html += `<div class="card sitemap"><h3>${lvName[lv]}页面（${ps.length} 个）</h3>`;
+    html += `<details class="pgmap" open><summary><span class="lv-tag l${lv}" style="width:44px;text-align:center;border-radius:6px;color:#fff;padding:2px 8px;font-size:11px">L${lv}</span>${lvName[lv]}页面（${ps.length} 个）</summary>`;
     ps.forEach(p=>{
-      html += `<div class="lv"><span class="lv-tag l${lv}">L${lv}</span><a href="#${p.path}"><b>${p.title}</b>${p.parent?`　<span style="color:#b0b0b0;font-size:12px">← ${p.parent}</span>`:''}</a><span class="lv-path">${p.path}</span></div>`;
+      html += `<div class="lv"><a href="#${p.path}"><b>${p.title}</b>${p.parent?`　<span style="color:#b0b0b0;font-size:12px">← ${p.parent}</span>`:''}</a><span class="lv-path">${p.path}</span></div>`;
     });
-    html += `</div>`;
+    html += `</details>`;
   });
   return html;
 }});

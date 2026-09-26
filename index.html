@@ -151,9 +151,60 @@ textarea.inp{min-height:80px;resize:vertical}
 .l4{background:#0ea5e9;color:#fff}
 .l5{background:#64748b;color:#fff}
 .lv-path{font-family:Consolas,monospace;font-size:11px;color:#b0b0b0;flex:none;width:340px}
+/* ===== 优化增强样式 ===== */
+/* SVG 趋势图 */
+.spark{width:100%;height:64px;display:block}
+/* 侧栏分组折叠 */
+.sb-sec{margin-bottom:6px}
+.sb-group{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;font-size:11px;color:#565a66;padding:12px 10px 6px;letter-spacing:1px}
+.sb-group::after{content:'▾';font-size:10px;transition:transform .2s}
+.sb-sec.collapsed .sb-group::after{transform:rotate(-90deg)}
+.sb-sec.collapsed .sb-body{display:none}
+.sb-body .sb-item{transition:all .15s}
+/* 下拉菜单 */
+.dd{position:relative}
+.dd-btn{display:flex;align-items:center;gap:6px;cursor:pointer;padding:6px 10px;border-radius:8px;font-size:13px;color:var(--ink2);background:#fff;border:1px solid var(--line)}
+.dd-btn:hover{border-color:var(--brand);color:var(--brand)}
+.dd-menu{display:none;position:absolute;right:0;top:calc(100% + 6px);background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.1);min-width:180px;z-index:60;overflow:hidden}
+.dd.open .dd-menu{display:block}
+.dd-menu a{display:block;padding:10px 16px;font-size:13px;color:var(--ink2)}
+.dd-menu a:hover{background:var(--brand-light);color:var(--brand)}
+.dd-menu .sep{border-top:1px solid #f0f0f0}
+.dot{width:8px;height:8px;background:var(--brand);border-radius:50%;display:inline-block;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+/* 移动端抽屉 */
+.burger{display:none;width:38px;height:38px;border:1px solid var(--line);background:#fff;border-radius:8px;font-size:17px;color:var(--ink2)}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:45}
+.overlay.show{display:block}
+/* 首页 Hero 品牌化 */
+.hero-logo{height:72px;margin:0 auto 22px;filter:drop-shadow(0 10px 22px rgba(218,37,28,.35))}
+.chips{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:34px}
+.chip{padding:7px 16px;border-radius:20px;background:#fff;border:1px solid var(--line);font-size:13px;color:var(--ink2);box-shadow:0 4px 12px rgba(0,0,0,.05);animation:float 4s ease-in-out infinite}
+.chip:nth-child(2){animation-delay:.8s}.chip:nth-child(3){animation-delay:1.6s}.chip:nth-child(4){animation-delay:2.4s}.chip:nth-child(5){animation-delay:3.2s}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+/* 海报占位升级 */
+.poster-box{height:170px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:600;letter-spacing:2px}
+.poster-1{background:linear-gradient(135deg,#DA251C,#F26B1A)}
+.poster-2{background:linear-gradient(135deg,#13131C,#4B5563)}
+.poster-3{background:linear-gradient(135deg,#7C5CFF,#4f46e5)}
+/* 页面地图折叠 */
+details.pgmap{border:1px solid var(--line);border-radius:10px;background:#fff;margin-bottom:12px;overflow:hidden}
+details.pgmap summary{cursor:pointer;padding:13px 18px;font-weight:600;font-size:15px;display:flex;align-items:center;gap:10px;list-style:none}
+details.pgmap summary::-webkit-details-marker{display:none}
+details.pgmap summary::before{content:'▸';color:var(--brand);transition:transform .2s}
+details.pgmap[open] summary::before{transform:rotate(90deg)}
+details.pgmap .lv{padding:8px 18px}
+details.pgmap .lv:hover{background:#fffaf8}
 /* 演示水印 */
 .demo-note{position:fixed;right:12px;bottom:12px;background:rgba(19,19,28,.85);color:#fff;font-size:11px;padding:6px 12px;border-radius:20px;z-index:99}
-@media(max-width:900px){.lp-nav-links{display:none}.g3,.g4,.lp-steps{grid-template-columns:1fr 1fr}.stat-grid{grid-template-columns:1fr 1fr}.sidebar{width:64px}.sidebar .logo-text,.sb-item span.txt,.sb-group{display:none}.c-main{margin-left:64px}}
+@media(max-width:900px){
+  .lp-nav-links{display:none}.g3,.g4,.lp-steps{grid-template-columns:1fr 1fr}.stat-grid{grid-template-columns:1fr 1fr}
+  .sidebar{transform:translateX(-100%);transition:transform .25s;width:232px}
+  .sidebar.open{transform:translateX(0);box-shadow:8px 0 30px rgba(0,0,0,.3)}
+  .c-main{margin-left:0}
+  .burger{display:flex;align-items:center;justify-content:center}
+  .c-search{display:none}
+}
 </style>
 </head>
 <body>

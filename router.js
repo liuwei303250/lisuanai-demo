@@ -8,7 +8,17 @@ const L = (v) => v;
 
 const badge = (t, c) => `<span class="badge ${c}">${t}</span>`;
 const statCard = (k, v, d, cls) => `<div class="stat"><div class="k">${k}</div><div class="v">${v}</div><div class="d ${cls||''}">${d}</div></div>`;
-const bar = (arr) => `<div class="mini-chart">${arr.map(h => `<i style="height:${h}%"></i>`).join('')}</div>`;
+const bar = (arr) => {
+  const w = 640, h = 64, p = 6, max = Math.max(...arr, 1);
+  const pts = arr.map((v, i) => [p + i * (w - 2 * p) / (arr.length - 1), h - p - (v / max) * (h - 2 * p)]
+    .map(x => x.toFixed(1)).join(',')).join(' ');
+  return `<svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><defs>
+    <linearGradient id="gfill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#DA251C" stop-opacity=".30"/><stop offset="1" stop-color="#DA251C" stop-opacity="0"/></linearGradient>
+    <linearGradient id="gline" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#DA251C"/><stop offset="1" stop-color="#F26B1A"/></linearGradient>
+  </defs>
+  <polygon points="0,${h} ${pts} ${w},${h}" fill="url(#gfill)"/>
+  <polyline points="${pts}" fill="none" stroke="url(#gline)" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/></svg>`;
+};
 const table = (heads, rows) => `<div class="card" style="overflow-x:auto"><table class="tbl"><thead><tr>${heads.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table><div class="pager"><span>‹</span><span class="on">1</span><span>2</span><span>3</span><span>›</span></div></div>`;
 const formRow = (label, control, hint, req) => `<div class="form-row"><label>${req?'<span class="req">*</span> ':''}${label}</label><div>${control}${hint?`<div class="hint">${hint}</div>`:''}</div></div>`;
 
@@ -49,14 +59,21 @@ const SB = [
 function sb() {
   return `<aside class="sidebar">
     <a href="#/">${logo(true)}</a>
-    ${SB.map(g=>`<div class="sb-group">${g.g}</div>${g.items.map(([p,t,i])=>`<a class="sb-item" href="${p}"><span>${i}</span><span class="txt">${t}</span></a>`).join('')}`).join('')}
+    ${SB.map(g=>`<div class="sb-sec"><div class="sb-group">${g.g}</div><div class="sb-body">${g.items.map(([p,t,i])=>`<a class="sb-item" href="${p}"><span>${i}</span><span class="txt">${t}</span></a>`).join('')}</div></div>`).join('')}
   </aside>`;
 }
 function consoleLayout(p, content) {
   const crumbs = p.crumb || [p.title];
-  const hd = `<div class="c-top"><div><div class="c-title">${p.title}</div><div class="crumb">首页 / 控制台 ${crumbs.map(c=>` / <b>${c}</b>`).join('')}</div></div>
-    <div style="display:flex;gap:10px;align-items:center"><input class="c-search" placeholder="搜索功能…"><span style="font-size:13px;color:var(--ink3)">🔔</span><span class="badge brand">langzhi</span></div></div>`;
-  return `<div class="console">${sb()}<main class="c-main">${hd}${content}</main></div>`;
+  const hd = `<div class="c-top"><div style="display:flex;align-items:center;gap:12px">
+    <button class="burger" title="菜单">☰</button>
+    <div><div class="c-title">${p.title}</div><div class="crumb">首页 / 控制台 ${crumbs.map(c=>` / <b>${c}</b>`).join('')}</div></div></div>
+    <div style="display:flex;gap:10px;align-items:center"><input class="c-search" placeholder="搜索功能…">
+      <div class="dd" id="dd-bell"><span class="dd-btn"><span>🔔</span><span class="dot"></span></span>
+        <div class="dd-menu"><a href="#/console/settings/notifications">💰 佣金 +¥6.00 已入账</a><a href="#/console/support/tickets">🎧 工单 TK2026092501 有新回复</a><a href="#/console/settings/notifications">📢 查看全部通知</a></div></div>
+      <div class="dd" id="dd-user"><span class="dd-btn">👤 langzhi ▾</span>
+        <div class="dd-menu"><a href="#/console/settings">⚙️ 个人设置</a><a href="#/sitemap">🗺️ 页面地图</a><div class="sep"></div><a href="#/login">🚪 退出登录</a></div></div>
+    </div></div>`;
+  return `<div class="console">${sb()}<main class="c-main">${hd}${content}</main><div class="overlay" id="overlay"></div></div>`;
 }
 
 /* ---------- 路由 ---------- */
@@ -86,4 +103,53 @@ function render() {
   window.scrollTo(0, 0);
 }
 window.addEventListener('hashchange', render);
+
+/* ---------- 全局交互(事件委托) ---------- */
+document.addEventListener('click', (e) => {
+  // 复制按钮
+  const cp = e.target.closest('.copy');
+  if (cp) {
+    const box = cp.closest('.key-box');
+    if (box) {
+      const txt = box.textContent.replace('复制', '').trim();
+      (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(
+        () => { cp.textContent = '已复制 ✓'; setTimeout(() => (cp.textContent = '复制'), 1500); },
+        () => { cp.textContent = '复制失败'; setTimeout(() => (cp.textContent = '复制'), 1500); }
+      );
+    }
+    return;
+  }
+  // 侧栏分组折叠(记忆状态)
+  const sg = e.target.closest('.sb-group');
+  if (sg) {
+    const sec = sg.parentElement;
+    sec.classList.toggle('collapsed');
+    const state = {};
+    document.querySelectorAll('.sb-sec').forEach((s, i) => (state['sec' + i] = s.classList.contains('collapsed')));
+    localStorage.setItem('sb-collapse', JSON.stringify(state));
+    return;
+  }
+  // 下拉菜单
+  const ddb = e.target.closest('.dd-btn');
+  if (ddb) {
+    const dd = ddb.closest('.dd');
+    const wasOpen = dd.classList.contains('open');
+    document.querySelectorAll('.dd').forEach(d => d.classList.remove('open'));
+    if (!wasOpen) dd.classList.add('open');
+    return;
+  }
+  if (e.target.closest('.dd-menu')) return;
+  document.querySelectorAll('.dd').forEach(d => d.classList.remove('open'));
+  // 移动端抽屉
+  if (e.target.closest('.burger')) {
+    document.querySelector('.sidebar').classList.add('open');
+    document.getElementById('overlay').classList.add('show');
+    return;
+  }
+  if (e.target.closest('.overlay')) {
+    document.querySelector('.sidebar').classList.remove('open');
+    document.getElementById('overlay').classList.remove('show');
+  }
+});
+
 render();
