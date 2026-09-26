@@ -313,3 +313,55 @@ page({ path:'/console/settings/devices/:id', title:'设备详情', level:4, pare
     <div style="margin-top:14px"><a class="btn btn-ghost">强制下线</a> <a class="btn btn-ghost" href="#/console/settings/devices">返回列表</a></div>
   </div>`;
 }});
+
+/* ---- 四级 · 代理结算单详情(补齐死链接) ---- */
+page({ path:'/console/agent/settlements/:id', title:'结算单详情', level:4, parent:'代理后台·结算单', group:'console', crumb:['代理后台','结算单','结算单详情'], render(){ return `
+  <div class="card"><h3>账期 2026-08（代理结算单）</h3>
+    ${table(['项目','金额'],[
+      ['客户消费总额','¥6,540'],
+      ['佣金费率','15%'],
+      ['佣金金额','¥981'],
+      ['代扣税','¥0'],
+      ['实发金额','¥981'],
+    ])}
+    <div style="margin-top:12px"><a class="btn btn-ghost btn-sm">导出 CSV</a> <a class="btn btn-ghost btn-sm" href="#/console/agent/settlements">返回列表</a></div>
+  </div>
+  <div class="card"><h3>客户消费明细</h3>${table(['客户','消费金额','佣金(15%)'],[
+    ['176****2533','¥4,320','¥648'],
+    ['138****1102','¥1,860','¥279'],
+    ['其他 40 人','¥360','¥54'],
+  ])}</div>`; }});
+
+/* ---- 四级 · 代理提现详情(补齐死链接) ---- */
+page({ path:'/console/agent/withdrawals/:id', title:'提现详情', level:4, parent:'代理后台·提现记录', group:'console', crumb:['代理后台','提现记录','提现详情'], render(){ return `
+  <div class="card" style="max-width:680px">
+    ${table(['字段','值'],[
+      ['申请单号','AGWD20260905001'],
+      ['金额','¥420'],
+      ['收款方式','支付宝（138****）'],
+      ['申请时间','2026-09-05 10:12'],
+      ['审核','通过 · 无异常'],
+      ['打款时间','2026-09-05 16:40'],
+      ['状态',badge('已打款','green')],
+    ])}
+    <div style="margin-top:14px"><a class="btn btn-ghost" href="#/console/agent/withdrawals">返回提现记录</a></div>
+  </div>`; }});
+
+/* ---- 四级 · 二级下线详情(补齐死链接) ---- */
+page({ path:'/console/affiliate/level2/:id', title:'下线用户详情', level:4, parent:'二级下线', group:'console', crumb:['推广分销','二级下线','用户详情'], render(){ return `
+  <div class="stat-grid" style="grid-template-columns:repeat(3,1fr)">
+    ${statCard('累计消费','¥540','本月 ¥120','💰')}
+    ${statCard('累计佣金','¥27','本月 ¥6','🤝')}
+    ${statCard('绑定时间','2026-08-20','已绑定 37 天','📅')}
+  </div>
+  <div class="card"><h3>用户信息</h3>${table(['字段','值'],[
+    ['客户账号','159****7781'],
+    ['层级','二级下线'],
+    ['上级','176****2533（一级下线）'],
+    ['最近活跃','2026-09-25 20:15'],
+  ])}</div>
+  <div class="card"><h3>消费明细</h3>${table(['时间','模型','消费金额','我的佣金(5%)'],[
+    ['2026-09-25 20:15','deepseek-v4-flash','¥60','¥3.00'],
+    ['2026-09-18 12:40','gpt-4o-mini','¥42','¥2.10'],
+  ])}</div>
+  <div><a class="btn btn-ghost" href="#/console/affiliate/level2">返回二级下线</a></div>`; }});
