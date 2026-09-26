@@ -4,10 +4,11 @@ const page = (p) => PAGES.push(p);
 
 /* ---------- 通用组件 ---------- */
 const esc = (s) => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const L = (v) => v;
 
 const badge = (t, c) => `<span class="badge ${c}">${t}</span>`;
-const statCard = (k, v, d, cls) => `<div class="stat"><div class="k">${k}</div><div class="v">${v}</div><div class="d ${cls||''}">${d}</div></div>`;
+const statCard = (k, v, d, ico) => `<div class="stat"><div class="k">${ico ? `<span class="ico">${ico}</span>` : ''}${k}</div><div class="v">${v}</div><div class="d">${d || ''}</div></div>`;
+const pill = (t, dir) => `<span class="d-pill ${dir}">${t}</span>`;
+const progress = (pct) => `<div class="progress"><i style="width:${pct}%"></i></div>`;
 const bar = (arr) => {
   const w = 640, h = 64, p = 6, max = Math.max(...arr, 1);
   const pts = arr.map((v, i) => [p + i * (w - 2 * p) / (arr.length - 1), h - p - (v / max) * (h - 2 * p)]
@@ -21,6 +22,45 @@ const bar = (arr) => {
 };
 const table = (heads, rows) => `<div class="card" style="overflow-x:auto"><table class="tbl"><thead><tr>${heads.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table><div class="pager"><span>‹</span><span class="on">1</span><span>2</span><span>3</span><span>›</span></div></div>`;
 const formRow = (label, control, hint, req) => `<div class="form-row"><label>${req?'<span class="req">*</span> ':''}${label}</label><div>${control}${hint?`<div class="hint">${hint}</div>`:''}</div></div>`;
+
+/* 共享页签组件:items=[[href,label],...],activePath 高亮当前页 */
+const tabs = (items, activePath) => `<div class="tabbar">${items.map(([h, t]) => `<a href="${h}" class="${activePath === h ? 'on' : ''}">${t}</a>`).join('')}</div>`;
+
+/* Toast 操作反馈 */
+function toast(msg) {
+  let wrap = document.getElementById('toast-wrap');
+  if (!wrap) {
+    wrap = document.createElement('div');
+    wrap.id = 'toast-wrap';
+    document.body.appendChild(wrap);
+  }
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  wrap.appendChild(t);
+  setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 350); }, 2400);
+}
+
+/* AI 助手悬浮球 + 对话面板 */
+const AI_REPLIES = {
+  '查余额': '您的账户余额 ¥86.42，今日消费 ¥0.12。如需明细可前往「调用日志」查看逐笔计费。',
+  '查用量': '近 7 日调用 8,936 次，TOP 模型为 deepseek-v4-flash（45%）。趋势详见「概览」页图表。',
+  '如何充值': '前往「充值中心」选择套餐，支持微信/支付宝/对公转账，基础套餐 ¥50 赠 5% 额度。',
+  '联系客服': '已为您准备好工单入口 → 客户服务 → 提交工单，平均响应 10 分钟。',
+};
+function aiWidget() {
+  return `<button class="ai-fab" title="AI 助手">🤖</button>
+  <div class="ai-panel" id="ai-panel">
+    <div class="hd">🤖 小芯 AI 助手 <span style="font-size:11px;opacity:.8;margin-left:auto">在线</span></div>
+    <div class="bd">
+      <div class="ai-msg bot">您好，我是小芯。可以问我余额、用量、充值、客服等问题，也可以直接点下方快捷指令 👇</div>
+    </div>
+    <div class="ai-chips">
+      ${Object.keys(AI_REPLIES).map(k => `<span class="ai-chip" data-q="${k}">${k}</span>`).join('')}
+    </div>
+    <div class="ft"><input class="inp" id="ai-input" placeholder="输入问题…"><button class="btn btn-primary btn-sm" id="ai-send">发送</button></div>
+  </div>`;
+}
 
 /* ---------- Logo ---------- */
 const logo = (dark) => `<div class="logo"><span class="logo-mark"><img src="assets/${dark?'logo-whiten':'logo'}.png" alt="中芯力算"></span></div>`;
@@ -46,7 +86,7 @@ function lpFooter() {
   </div></footer>`;
 }
 function lpLayout(p, content) {
-  return `${lpNav(p.path)}${content}${lpFooter()}`;
+  return `${lpNav(p.path)}${content}${lpFooter()}${aiWidget()}`;
 }
 
 /* ---------- 控制台侧栏 ---------- */
@@ -60,6 +100,7 @@ function sb() {
   return `<aside class="sidebar">
     <a href="#/">${logo(true)}</a>
     ${SB.map(g=>`<div class="sb-sec"><div class="sb-group">${g.g}</div><div class="sb-body">${g.items.map(([p,t,i])=>`<a class="sb-item" href="${p}"><span>${i}</span><span class="txt">${t}</span></a>`).join('')}</div></div>`).join('')}
+    <div class="sb-foot">中芯力算 Demo v2.0<br>© 2026 lisuanai.cn</div>
   </aside>`;
 }
 function consoleLayout(p, content) {
@@ -73,7 +114,7 @@ function consoleLayout(p, content) {
       <div class="dd" id="dd-user"><span class="dd-btn">👤 langzhi ▾</span>
         <div class="dd-menu"><a href="#/console/settings">⚙️ 个人设置</a><a href="#/sitemap">🗺️ 页面地图</a><div class="sep"></div><a href="#/login">🚪 退出登录</a></div></div>
     </div></div>`;
-  return `<div class="console">${sb()}<main class="c-main">${hd}${content}</main><div class="overlay" id="overlay"></div></div>`;
+  return `<div class="console">${sb()}<main class="c-main">${hd}${content}</main><div class="overlay" id="overlay"></div>${aiWidget()}</div>`;
 }
 
 /* ---------- 路由 ---------- */
@@ -97,9 +138,23 @@ function render() {
   const p = match(hash) || match('/404');
   const html = p.group === 'landing' ? lpLayout(p, p.render()) : consoleLayout(p, p.render());
   document.getElementById('app').innerHTML = html;
-  // 高亮侧栏/顶部导航
-  document.querySelectorAll('.sb-item').forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + hash));
-  document.querySelectorAll('.lp-nav-links a').forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + hash));
+  // 侧栏高亮:精确匹配或前缀匹配(子页面归属父菜单)
+  document.querySelectorAll('.sb-item').forEach(a => {
+    const h = a.getAttribute('href');
+    const on = h === '#' + hash || (h !== '#/console' && hash.startsWith(h.slice(1) + '/'));
+    a.classList.toggle('on', on);
+  });
+  // 顶部导航高亮(控制台前缀匹配)
+  document.querySelectorAll('.lp-nav-links a').forEach(a => {
+    const h = a.getAttribute('href');
+    const on = h === '#' + hash || (h === '#/console' && hash.startsWith('/console'));
+    a.classList.toggle('on', on);
+  });
+  // 恢复侧栏分组折叠状态
+  try {
+    const st = JSON.parse(localStorage.getItem('sb-collapse') || '{}');
+    document.querySelectorAll('.sb-sec').forEach((s, i) => { if (st['sec' + i]) s.classList.add('collapsed'); });
+  } catch (e) {}
   window.scrollTo(0, 0);
 }
 window.addEventListener('hashchange', render);
@@ -150,5 +205,34 @@ document.addEventListener('click', (e) => {
   if (e.target.closest('.overlay')) {
     document.querySelector('.sidebar').classList.remove('open');
     document.getElementById('overlay').classList.remove('show');
+    return;
   }
+  // AI 助手悬浮球
+  if (e.target.closest('.ai-fab')) {
+    document.getElementById('ai-panel').classList.toggle('open');
+    return;
+  }
+  // AI 助手对话
+  const chip = e.target.closest('.ai-chip');
+  if (chip) {
+    const q = chip.dataset.q;
+    const bd = document.querySelector('#ai-panel .bd');
+    bd.insertAdjacentHTML('beforeend', `<div class="ai-msg user">${q}</div><div class="ai-msg bot">${AI_REPLIES[q] || '抱歉，我还在学习中。'}</div>`);
+    bd.scrollTop = bd.scrollHeight;
+    return;
+  }
+  if (e.target.closest('#ai-send')) {
+    const inp = document.getElementById('ai-input');
+    const q = (inp.value || '').trim();
+    if (!q) { toast('请先输入问题'); return; }
+    const bd = document.querySelector('#ai-panel .bd');
+    const a = AI_REPLIES[q] || '已收到您的问题，客服将尽快回复（演示环境为模拟回复）。';
+    bd.insertAdjacentHTML('beforeend', `<div class="ai-msg user">${esc(q)}</div><div class="ai-msg bot">${a}</div>`);
+    bd.scrollTop = bd.scrollHeight;
+    inp.value = '';
+    return;
+  }
+  // 主操作按钮 Toast 反馈(无跳转的演示按钮)
+  const act = e.target.closest('a.btn-primary');
+  if (act && !act.getAttribute('href')) { toast('✅ 操作成功 · 演示环境'); }
 });
