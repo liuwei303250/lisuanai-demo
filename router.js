@@ -23,7 +23,7 @@ const table = (heads, rows) => `<div class="card" style="overflow-x:auto"><table
 const formRow = (label, control, hint, req) => `<div class="form-row"><label>${req?'<span class="req">*</span> ':''}${label}</label><div>${control}${hint?`<div class="hint">${hint}</div>`:''}</div></div>`;
 
 /* ---------- Logo ---------- */
-const logo = (dark) => `<div class="logo"><span class="logo-mark"><img src="assets/logo.png" alt="中芯力算"></span><span class="logo-text" style="${dark?'color:#fff':''}">中芯力算</span><span class="logo-sub">lisuanai.cn</span></div>`;
+const logo = (dark) => `<div class="logo"><span class="logo-mark"><img src="assets/${dark?'logo-whiten':'logo'}.png" alt="中芯力算"></span><span class="logo-sub" style="${dark?'color:#9ca3af':''}">lisuanai.cn</span></div>`;
 
 /* ---------- 落地页布局 ---------- */
 function lpNav(active) {
