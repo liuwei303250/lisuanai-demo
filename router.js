@@ -103,6 +103,7 @@ function render() {
   window.scrollTo(0, 0);
 }
 window.addEventListener('hashchange', render);
+/* render() 由 index.html 在全部页面脚本加载完成后调用 */
 
 /* ---------- 全局交互(事件委托) ---------- */
 document.addEventListener('click', (e) => {
@@ -151,5 +152,3 @@ document.addEventListener('click', (e) => {
     document.getElementById('overlay').classList.remove('show');
   }
 });
-
-render();
