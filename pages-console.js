@@ -89,9 +89,9 @@ page({ path:'/console/playground/video', title:'在线体验 · 视频生成', l
     <div style="margin-left:130px"><a class="btn btn-primary">提交任务</a></div>
   </div>
   <div class="card"><h3>任务列表</h3>${table(['任务 ID','模型','规格','状态','耗时','费用','操作'],[
-    ['vs_8f3k2','seedance-2.0','720p·5s',badge('已完成','green'),'2 分 14 秒','¥0.43','预览 · 下载'],
-    ['vs_7c1a9','vidu-q2','720p·5s',badge('生成中','amber'),'—','¥0.50','取消'],
-    ['vs_2d8b4','seedance-2.0','480p·5s',badge('已完成','green'),'1 分 46 秒','¥0.36','预览 · 下载'],
+    ['vs_8f3k2','seedance-2.0','720p·5s',badge('已完成','green'),'2 分 14 秒','¥0.43','<button class="btn btn-ghost btn-sm">预览</button> <button class="btn btn-ghost btn-sm">下载</button>'],
+    ['vs_7c1a9','vidu-q2','720p·5s',badge('生成中','amber'),'—','¥0.50','<button class="btn btn-ghost btn-sm">取消</button>'],
+    ['vs_2d8b4','seedance-2.0','480p·5s',badge('已完成','green'),'1 分 46 秒','¥0.36','<button class="btn btn-ghost btn-sm">预览</button> <button class="btn btn-ghost btn-sm">下载</button>'],
   ])}</div>`; }});
 
 /* ---- 二级/三级 · API 密钥 ---- */
@@ -269,8 +269,8 @@ page({ path:'/console/agent/templates', title:'折扣模板', level:3, parent:'�
   ${tabs(T_AGNT, '/console/agent/templates')}
   <div style="text-align:right;margin-bottom:12px"><a class="btn btn-primary" href="#/console/agent/templates">+ 新建模板</a></div>
   ${table(['模板名','模型范围','折扣','适用客户数','更新时间','操作'],[
-    ['大客户 9 折','全部文本模型','9 折','12','2026-09-20','<a href="#/console/agent/clients/1/discount">编辑</a> 批量下发'],
-    ['DeepSeek 促销','deepseek-*','85 折','36','2026-09-15','<a href="#/console/agent/clients/1/discount">编辑</a> 批量下发'],
+    ['大客户 9 折','全部文本模型','9 折','12','2026-09-20','<a href="#/console/agent/clients/1/discount">编辑</a> <button class="btn btn-ghost btn-sm">批量下发</button>'],
+    ['DeepSeek 促销','deepseek-*','85 折','36','2026-09-15','<a href="#/console/agent/clients/1/discount">编辑</a> <button class="btn btn-ghost btn-sm">批量下发</button>'],
   ])}`; }});
 page({ path:'/console/agent/settlements', title:'结算单', level:3, parent:'代理后台', group:'console', crumb:['代理后台','结算单'], render(){ return `
   ${tabs(T_AGNT, '/console/agent/settlements')}
@@ -440,8 +440,8 @@ page({ path:'/console/settings/devices', title:'登录设备', level:3, parent:'
   ${tabs(T_SET, '/console/settings/devices')}
   ${table(['设备','浏览器','IP','地点','最近登录','操作'],[
     ['Windows 11','Chrome 128','112.49.***.**','福建福州','2026-09-26 15:27',badge('当前设备','brand')],
-    ['iPhone 16','Safari 18','119.6.***.**','广东深圳','2026-09-24 09:12','<a href="#/console/settings/devices/2">详情</a> 强制下线'],
-    ['MacBook','Chrome 127','218.5.***.**','上海','2026-09-20 21:45','<a href="#/console/settings/devices/3">详情</a> 强制下线'],
+    ['iPhone 16','Safari 18','119.6.***.**','广东深圳','2026-09-24 09:12','<a href="#/console/settings/devices/2">详情</a> <button class="btn btn-ghost btn-sm">强制下线</button>'],
+    ['MacBook','Chrome 127','218.5.***.**','上海','2026-09-20 21:45','<a href="#/console/settings/devices/3">详情</a> <button class="btn btn-ghost btn-sm">强制下线</button>'],
   ])}`; }});
 page({ path:'/console/settings/notifications', title:'消息通知', level:3, parent:'个人设置', group:'console', crumb:['个人设置','消息通知'], render(){ return `
   ${tabs(T_SET, '/console/settings/notifications')}
