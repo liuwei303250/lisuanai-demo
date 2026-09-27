@@ -232,7 +232,10 @@ document.addEventListener('click', (e) => {
     inp.value = '';
     return;
   }
-  // 主操作按钮 Toast 反馈(无跳转的演示按钮)
-  const act = e.target.closest('a.btn-primary');
-  if (act && !act.getAttribute('href')) { toast('✅ 操作成功 · 演示环境'); }
+  // 全部无跳转按钮 Toast 反馈(演示环境统一即时反馈,不放过每个按钮)
+  const act = e.target.closest('a.btn, button');
+  if (act && !act.getAttribute('href')) {
+    const label = (act.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 14);
+    toast(label ? `✅ ${label} · 演示环境` : '✅ 操作成功 · 演示环境');
+  }
 });
