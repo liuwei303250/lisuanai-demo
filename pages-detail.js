@@ -221,7 +221,7 @@ page({ path:'/console/supplier/bills/:id', title:'结算单详情', level:4, par
       ['deepseek-v4-pro','4.1万','1.2M','¥828'],
       ['合计','42.3万','8.3M','¥1,680'],
     ])}
-    <div style="margin-top:14px"><a class="btn btn-ghost">导出 CSV</a> <a class="btn btn-ghost" href="#/console/supplier/bills">返回</a></div>
+    <div style="margin-top:14px"><button class="btn btn-ghost">导出 CSV</button> <a class="btn btn-ghost" href="#/console/supplier/bills">返回</a></div>
   </div>`;
 }});
 
@@ -267,7 +267,7 @@ page({ path:'/console/invoice/history/:id', title:'发票详情', level:4, paren
       ['申请时间','2026-08-05 10:00'],
       ['状态',badge('已开具','green')],
     ])}
-    <div style="margin-top:14px"><a class="btn btn-primary">下载 PDF</a> <a class="btn btn-ghost" href="#/console/invoice/history">返回</a></div>
+    <div style="margin-top:14px"><button class="btn btn-primary">下载 PDF</button> <a class="btn btn-ghost" href="#/console/invoice/history">返回</a></div>
   </div>`;
 }});
 
@@ -310,7 +310,7 @@ page({ path:'/console/settings/devices/:id', title:'设备详情', level:4, pare
       ['登录次数','47 次'],
       ['状态',badge('正常','green')],
     ])}
-    <div style="margin-top:14px"><a class="btn btn-ghost">强制下线</a> <a class="btn btn-ghost" href="#/console/settings/devices">返回列表</a></div>
+    <div style="margin-top:14px"><button class="btn btn-ghost">强制下线</button> <a class="btn btn-ghost" href="#/console/settings/devices">返回列表</a></div>
   </div>`;
 }});
 
